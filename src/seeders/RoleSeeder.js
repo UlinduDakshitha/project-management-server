@@ -23,7 +23,7 @@ const seedRoles = async () => {
     });
   }
 
-  console.log("✅ Roles Seeded");
+  console.log("Roles seeded");
 };
 
 module.exports = seedRoles;

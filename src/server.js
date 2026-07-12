@@ -8,14 +8,13 @@ async function startServer() {
   try {
     await sequelize.authenticate();
 
-    console.log("✅ Database Connected");
+    console.log("Database connected");
 
     await seedRoles();
 
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
-
   } catch (err) {
     console.log(err);
   }
