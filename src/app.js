@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const sequelize = require("./config/database");
 
 const app = express();
 
@@ -21,4 +22,12 @@ app.get("/", (req, res) => {
     });
 });
 
+sequelize.authenticate()
+.then(() => {
+    console.log("✅ Database Connected");
+})
+.catch((err) => {
+    console.log("❌ Database Connection Failed");
+    console.log(err.message);
+});
 module.exports = app;
