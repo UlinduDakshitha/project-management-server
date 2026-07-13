@@ -1,5 +1,6 @@
 const Role = require("./Role");
 const User = require("./User");
+const Project = require("./Project");
 const ProjectMember = require("./ProjectMember");
 const Task = require("./Task");
 const Comment = require("./Comment");

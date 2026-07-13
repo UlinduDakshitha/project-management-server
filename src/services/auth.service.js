@@ -12,7 +12,7 @@ async function register(payload) {
   }
 
   const role = await Role.findOne({
-    where: { name: payload.role || "Team Member" },
+    where: { name: payload.role || "TEAM_MEMBER" },
   });
 
   if (!role) {
@@ -39,7 +39,12 @@ async function register(payload) {
 async function login(email, password) {
   const user = await User.findOne({
     where: { email },
-    include: [{ model: Role }],
+    include: [
+      {
+        model: Role,
+        as: "role",
+      },
+    ],
   });
 
   if (!user) {
@@ -62,13 +67,18 @@ async function login(email, password) {
     throw error;
   }
 
-  return buildAuthResponse(user, user.Role);
+  return buildAuthResponse(user, user.role);
 }
 
 async function getProfile(userId) {
   const user = await User.findByPk(userId, {
     attributes: { exclude: ["password"] },
-    include: [{ model: Role }],
+    include: [
+      {
+        model: Role,
+        as: "role",
+      },
+    ],
   });
 
   if (!user) {
@@ -94,7 +104,7 @@ function buildAuthResponse(user, role) {
     token,
     user: {
       ...userJson,
-      Role: role,
+      role,
     },
   };
 }

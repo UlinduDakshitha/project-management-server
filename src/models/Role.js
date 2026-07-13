@@ -1,31 +1,29 @@
-const Role = require("./Role");
-const User = require("./User");
-const Project = require("./Project");
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
 
-// Role -> User
-Role.hasMany(User, {
-  foreignKey: "role_id",
-  as: "users",
-});
+const Role = sequelize.define(
+  "Role",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
 
-User.belongsTo(Role, {
-  foreignKey: "role_id",
-  as: "role",
-});
+    name: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      unique: true,
+    },
 
-// User -> Project (Manager)
-User.hasMany(Project, {
-  foreignKey: "manager_id",
-  as: "managedProjects",
-});
+    description: {
+      type: DataTypes.STRING,
+    },
+  },
+  {
+    tableName: "roles",
+    timestamps: true,
+  }
+);
 
-Project.belongsTo(User, {
-  foreignKey: "manager_id",
-  as: "manager",
-});
-
-module.exports = {
-  Role,
-  User,
-  Project,
-};
+module.exports = Role;

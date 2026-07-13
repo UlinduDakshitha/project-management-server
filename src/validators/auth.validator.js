@@ -11,7 +11,7 @@ const registerValidator = [
   body("avatar").optional({ checkFalsy: true }).isURL().withMessage("Avatar must be a valid URL"),
   body("role")
     .optional({ checkFalsy: true })
-    .isIn(["Admin", "Project Manager", "Team Member"])
+    .isIn(["ADMIN", "PROJECT_MANAGER", "TEAM_MEMBER"])
     .withMessage("Role is invalid"),
 ];
 

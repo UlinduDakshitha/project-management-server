@@ -17,7 +17,12 @@ async function authenticate(req, res, next) {
 
     const user = await User.findByPk(decoded.id, {
       attributes: { exclude: ["password"] },
-      include: [{ model: Role }],
+      include: [
+        {
+          model: Role,
+          as: "role",
+        },
+      ],
     });
 
     if (!user || user.status !== "ACTIVE") {
