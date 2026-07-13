@@ -22,8 +22,8 @@ const User = sequelize.define(
 
     email: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
+      unique: true,
       validate: {
         isEmail: true,
       },
@@ -36,10 +36,17 @@ const User = sequelize.define(
 
     phone: {
       type: DataTypes.STRING,
+      allowNull: true,
     },
 
     avatar: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    role_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
 
     status: {
