@@ -1,6 +1,7 @@
 const Role = require("./Role");
 const User = require("./User");
 const ProjectMember = require("./ProjectMember");
+const Task = require("./Task");
 
 Role.hasMany(User, {
   foreignKey: "role_id",
@@ -25,10 +26,31 @@ User.belongsToMany(Project, {
   as: "projects",
 });
 
+Project.hasMany(Task, {
+    foreignKey: "project_id",
+    as: "tasks",
+});
+
+Task.belongsTo(Project, {
+    foreignKey: "project_id",
+    as: "project",
+});
+
+User.hasMany(Task, {
+    foreignKey: "assigned_to",
+    as: "assignedTasks",
+});
+
+Task.belongsTo(User, {
+    foreignKey: "assigned_to",
+    as: "assignee",
+});
+
  module.exports = {
   Role,
   User,
   Project,
+  Task,
   ProjectMember,
 };
  
