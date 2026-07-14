@@ -8,6 +8,7 @@ const authRoutes = require("./routes/auth.routes");
 const projectRoutes = require("./routes/project.routes");
 require("./models");
 const userRoutes = require("./routes/user.routes");
+const projectMemberRoutes = require("./routes/projectMember.routes");
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/projects", projectMemberRoutes);
 
 app.get("/", (req, res) => {
   res.json({
