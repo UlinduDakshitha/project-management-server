@@ -5,6 +5,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const authRoutes = require("./routes/auth.routes");
+const projectRoutes = require("./routes/project.routes");
 require("./models");
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/projects", projectRoutes);
 
 app.get("/", (req, res) => {
   res.json({
