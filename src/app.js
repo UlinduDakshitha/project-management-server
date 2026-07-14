@@ -10,6 +10,7 @@ require("./models");
 const userRoutes = require("./routes/user.routes");
 const projectMemberRoutes = require("./routes/projectMember.routes");
 const taskRoutes = require("./routes/task.routes");
+const dashboardRoutes = require("./routes/dashboard.routes");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/projects", projectMemberRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get("/", (req, res) => {
   res.json({
