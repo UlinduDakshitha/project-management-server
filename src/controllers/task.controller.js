@@ -30,7 +30,7 @@ async function createTask(req, res, next) {
 
 async function getTasks(req, res, next) {
   try {
-    const result = await taskService.getAllTasks();
+    const result = await taskService.getAllTasks(req.query);
 
     res.json({
       success: true,

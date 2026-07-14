@@ -1,5 +1,5 @@
 const { Task, Project, User } = require("../models");
-
+const { Op } = require("sequelize");
 async function createTask(payload) {
   const project = await Project.findByPk(payload.project_id);
 
@@ -30,8 +30,46 @@ async function createTask(payload) {
   return await getTaskById(task.id);
 }
 
-async function getAllTasks() {
-  return await Task.findAll({
+ async function getAllTasks(query = {}) {
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  const where = {};
+
+  if (query.search) {
+    where[Op.or] = [
+      {
+        title: {
+          [Op.like]: `%${query.search}%`,
+        },
+      },
+      {
+        description: {
+          [Op.like]: `%${query.search}%`,
+        },
+      },
+    ];
+  }
+
+  if (query.status) {
+    where.status = query.status;
+  }
+
+  if (query.priority) {
+    where.priority = query.priority;
+  }
+
+  if (query.project_id) {
+    where.project_id = query.project_id;
+  }
+
+  if (query.assigned_to) {
+    where.assigned_to = query.assigned_to;
+  }
+
+  const { rows, count } = await Task.findAndCountAll({
+    where,
     include: [
       {
         model: Project,
@@ -50,7 +88,19 @@ async function getAllTasks() {
       },
     ],
     order: [["createdAt", "DESC"]],
+    limit,
+    offset,
   });
+
+  return {
+    tasks: rows,
+    pagination: {
+      page,
+      limit,
+      total: count,
+      totalPages: Math.ceil(count / limit),
+    },
+  };
 }
 
 async function getTaskById(id) {
