@@ -28,7 +28,7 @@ async function createProject(payload) {
   return await getProjectById(project.id);
 }
 
-async function getAllProjects(query = {}) {
+ async function getAllProjects(query = {}) {
   const page = Number(query.page) || 1;
   const limit = Number(query.limit) || 10;
   const offset = (page - 1) * limit;
@@ -36,9 +36,18 @@ async function getAllProjects(query = {}) {
   const where = {};
 
   if (query.search) {
-    where.name = {
-      [Op.like]: `%${query.search}%`,
-    };
+    where[Op.or] = [
+      {
+        name: {
+          [Op.like]: `%${query.search}%`,
+        },
+      },
+      {
+        description: {
+          [Op.like]: `%${query.search}%`,
+        },
+      },
+    ];
   }
 
   if (query.status) {
@@ -71,9 +80,9 @@ async function getAllProjects(query = {}) {
   return {
     projects: rows,
     pagination: {
-      total: count,
       page,
       limit,
+      total: count,
       totalPages: Math.ceil(count / limit),
     },
   };
