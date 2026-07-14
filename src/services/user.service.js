@@ -1,17 +1,63 @@
 const bcrypt = require("bcryptjs");
+const { Op } = require("sequelize");
 const { User, Role } = require("../models");
 
-async function getAllUsers() {
-  return await User.findAll({
-    attributes: { exclude: ["password"] },
+async function getAllUsers(query = {}) {
+  const page = Math.max(Number(query.page) || 1, 1);
+  const limit = Math.max(Number(query.limit) || 10, 1);
+  const offset = (page - 1) * limit;
+
+  const where = {};
+
+  if (query.search) {
+    where[Op.or] = [
+      {
+        first_name: {
+          [Op.like]: `%${query.search}%`,
+        },
+      },
+      {
+        last_name: {
+          [Op.like]: `%${query.search}%`,
+        },
+      },
+      {
+        email: {
+          [Op.like]: `%${query.search}%`,
+        },
+      },
+    ];
+  }
+
+  if (query.status) {
+    where.status = query.status;
+  }
+
+  const { rows, count } = await User.findAndCountAll({
+    where,
+    attributes: {
+      exclude: ["password"],
+    },
     include: [
       {
         model: Role,
         as: "role",
       },
     ],
+    limit,
+    offset,
     order: [["createdAt", "DESC"]],
   });
+
+  return {
+    users: rows,
+    pagination: {
+      page,
+      limit,
+      total: count,
+      totalPages: Math.ceil(count / limit),
+    },
+  };
 }
 
 async function getUserById(id) {

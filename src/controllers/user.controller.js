@@ -14,7 +14,7 @@ function handleValidation(req) {
 
 async function getUsers(req, res, next) {
   try {
-    const result = await userService.getAllUsers();
+    const result = await userService.getAllUsers(req.query);
 
     res.json({
       success: true,

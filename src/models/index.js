@@ -4,6 +4,7 @@ const Project = require("./Project");
 const ProjectMember = require("./ProjectMember");
 const Task = require("./Task");
 const Comment = require("./Comment");
+const ActivityLog = require("./ActivityLog");
 
 /* ===========================
    Role <-> User
@@ -135,6 +136,16 @@ Comment.belongsTo(User, {
    Exports
 =========================== */
 
+User.hasMany(ActivityLog, {
+  foreignKey: "user_id",
+  as: "activities",
+});
+
+ActivityLog.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "user",
+});
+
 module.exports = {
   Role,
   User,
@@ -142,4 +153,5 @@ module.exports = {
   ProjectMember,
   Task,
   Comment,
+  ActivityLog,
 };
